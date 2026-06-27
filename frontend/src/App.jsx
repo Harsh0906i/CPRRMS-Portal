@@ -6,7 +6,7 @@ import { checkCurrentUser } from './features/authSlice';
 // Import layouts
 import DashboardLayout from './layouts/DashboardLayout';
 
-// Import pages
+// Import  pages
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
