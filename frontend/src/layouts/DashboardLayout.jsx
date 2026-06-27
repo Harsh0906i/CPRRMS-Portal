@@ -62,11 +62,10 @@ export default function DashboardLayout() {
               <Link
                 key={item.name}
                 to={item.path}
-                className={`flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group ${
-                  isActive
+                className={`flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group ${isActive
                     ? 'bg-primary text-primary-foreground shadow-md'
                     : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                }`}
+                  }`}
               >
                 <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-primary-foreground' : 'text-muted-foreground group-hover:text-accent-foreground'}`} />
                 {item.name}
@@ -113,7 +112,7 @@ export default function DashboardLayout() {
         <div className="fixed inset-0 z-40 flex md:hidden">
           {/* Backdrop */}
           <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
-          
+
           <div className="relative flex flex-col w-64 max-w-xs bg-card border-r border-border animate-slide-in">
             {/* Close Button */}
             <div className="absolute top-0 right-0 p-4">
@@ -135,11 +134,10 @@ export default function DashboardLayout() {
                     key={item.name}
                     to={item.path}
                     onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive
+                    className={`flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
                         ? 'bg-primary text-primary-foreground shadow-md'
                         : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                    }`}
+                      }`}
                   >
                     <Icon className="mr-3 h-5 w-5" />
                     {item.name}
@@ -184,7 +182,7 @@ export default function DashboardLayout() {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <h1 className="text-lg font-bold md:text-xl text-primary-foreground bg-primary/5 px-3 py-1 rounded-md border border-primary/10">
+            <h1 className="text-lg font-bold md:text-xl text-foreground bg-primary/5 px-3 py-1 rounded-md border border-primary/10">
               ICSR Patient Registry Management
             </h1>
           </div>
