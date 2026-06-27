@@ -5,7 +5,6 @@
 @layer base {
   :root {
     --background: #f8fafc;
-    --foreground: #0f172a;
 
     --card: #ffffff;
     --card-foreground: #0f172a;
