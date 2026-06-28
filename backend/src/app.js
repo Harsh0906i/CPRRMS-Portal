@@ -16,6 +16,7 @@ const reportRoutes = require('./routes/reportRoutes');
 const treatmentRoutes = require('./routes/treatmentRoutes');
 const receiptRoutes = require('./routes/receiptRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
+const patientPhotoRoutes = require('./routes/patientPhotoRoutes');
 
 const app = express();
 
@@ -67,6 +68,7 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/treatments', treatmentRoutes);
 app.use('/api/receipts', receiptRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/patients', patientPhotoRoutes);
 
 // Handle unhandled routes
 app.all('*', (req, res, next) => {

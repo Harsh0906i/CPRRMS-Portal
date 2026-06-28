@@ -5,6 +5,7 @@ import { fetchPatientById } from '../features/patientSlice';
 import { addTreatment, editTreatment, removeTreatment } from '../features/treatmentSlice';
 import { uploadReportFile, uploadNewVersion, fetchReportHistory, removeReport, clearHistory } from '../features/reportSlice';
 import { addReceipt } from '../features/receiptSlice';
+import CameraModal from "../components/CameraModal";
 import {
   Calendar,
   Phone,
@@ -21,13 +22,14 @@ import {
   Edit,
   CheckCircle,
   Clock,
-  ExternalLink
+  ExternalLink,
+  Camera,
 } from 'lucide-react';
 
 export default function PatientDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  
+
   const { currentPatient, loading, error } = useSelector(state => state.patients);
   const { history: reportVersions } = useSelector(state => state.reports);
 
@@ -39,6 +41,7 @@ export default function PatientDetail() {
   const [showReportModal, setShowReportModal] = useState(false);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showCameraModal, setShowCameraModal] = useState(false);
 
   // Treatment Form State
   const [treatmentForm, setTreatmentForm] = useState({
@@ -81,7 +84,7 @@ export default function PatientDetail() {
   const handleTreatmentSubmit = e => {
     e.preventDefault();
     const payload = { ...treatmentForm, patientId: id };
-    
+
     if (editingTreatmentId) {
       dispatch(editTreatment({ id: editingTreatmentId, treatmentData: payload })).then(() => {
         refreshPatient();
@@ -352,18 +355,18 @@ export default function PatientDetail() {
             {[
               { id: 'clinical', label: 'Clinical Regimens', icon: HeartPulse },
               { id: 'reports', label: 'Medical Reports', icon: FileText },
-              { id: 'billing', label: 'Billing Invoices', icon: CreditCard }
+              { id: 'billing', label: 'Billing Invoices', icon: CreditCard },
+              { id: 'photos', label: 'Cancer Photos', icon: Camera }
             ].map(tab => {
               const TabIcon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 flex items-center justify-center py-2.5 rounded-lg text-xs font-semibold transition-all ${
-                    activeTab === tab.id
-                      ? 'bg-primary text-primary-foreground shadow'
-                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                  }`}
+                  className={`flex-1 flex items-center justify-center py-2.5 rounded-lg text-xs font-semibold transition-all ${activeTab === tab.id
+                    ? 'bg-primary text-primary-foreground shadow'
+                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                    }`}
                 >
                   <TabIcon className="mr-2 h-4 w-4" />
                   {tab.label}
@@ -397,13 +400,12 @@ export default function PatientDetail() {
                         <div className="space-y-1">
                           <div className="flex items-center space-x-2">
                             <h4 className="font-bold text-sm text-primary">{treatment.treatmentType}</h4>
-                            <span className={`inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${
-                              isCompleted
-                                ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
-                                : isDiscontinued
+                            <span className={`inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${isCompleted
+                              ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
+                              : isDiscontinued
                                 ? 'bg-red-500/10 text-red-600 border border-red-500/20'
                                 : 'bg-blue-500/10 text-blue-600 border border-blue-500/20 animate-pulse'
-                            }`}>
+                              }`}>
                               {treatment.status}
                             </span>
                           </div>
@@ -574,6 +576,35 @@ export default function PatientDetail() {
               </div>
             </div>
           )}
+
+          {activeTab === "photos" && (
+            <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+
+              <div className="flex justify-between items-center">
+
+                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+                  Cancer Photos
+                </h3>
+
+                <button
+                  onClick={() => setShowCameraModal(true)}
+                  className="inline-flex items-center px-3 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-semibold"
+                >
+                  <Camera className="mr-2 h-4 w-4" />
+
+                  Capture Photo
+                </button>
+
+              </div>
+
+              <div className="mt-6 text-center text-muted-foreground">
+
+                No Cancer Photos Available
+
+              </div>
+
+            </div>
+          )}
         </div>
       </div>
 
@@ -721,7 +752,7 @@ export default function PatientDetail() {
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none"
                 />
               </div>
-              
+
               {!parentReportId && (
                 <div>
                   <label className="block text-xs font-semibold text-muted-foreground mb-1">Report Category</label>
@@ -840,13 +871,13 @@ export default function PatientDetail() {
             <h3 className="text-sm font-bold uppercase tracking-wider text-primary border-b border-border pb-2 mb-4">
               Diagnostic Report Document History
             </h3>
-            
+
             <div className="max-h-80 overflow-y-auto space-y-4 pr-1 my-4">
               {reportVersions.map((versionDoc, idx) => (
                 <div key={versionDoc._id} className="relative pl-6 border-l-2 border-primary/30 py-1">
                   {/* Circle dot on timeline */}
                   <span className="absolute -left-1.5 top-2.5 h-3 w-3 rounded-full bg-primary border-2 border-card" />
-                  
+
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-xs font-bold">
@@ -888,6 +919,15 @@ export default function PatientDetail() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* --- SHOW CAMERA MODAL --- */}
+      {showCameraModal && (
+        <CameraModal
+          patientId={id}  
+          onClose={() => setShowCameraModal(false)}
+          refreshPatient={refreshPatient}
+        />
       )}
     </div>
   );
